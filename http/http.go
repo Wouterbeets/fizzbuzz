@@ -41,11 +41,11 @@ func FizzHandler(w http.ResponseWriter, req *http.Request) {
 		writeError(w, http.StatusBadRequest, err)
 	}
 
-	ret, err := json.Marshal(fb.Generate())
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(fb.Generate())
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err)
 	}
-	fmt.Fprintln(w, string(ret))
 }
 
 func writeError(w http.ResponseWriter, statusCode int, err error) {
