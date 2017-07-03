@@ -5,13 +5,16 @@ import (
 	"errors"
 	"fmt"
 	"github.com/wouterbeets/fizzbuzz/fizz"
+	"log"
 	"net/http"
+	"net/http/httptest"
+	"net/http/httputil"
 	"net/url"
 	"strconv"
 )
 
 func NewServer(addr string) *http.Server {
-	http.HandleFunc("/fizz", FizzHandler)
+	http.HandleFunc("/fizz", logHandler(FizzHandler))
 	return &http.Server{
 		Addr: addr,
 	}
@@ -96,4 +99,18 @@ func paramsToFizzBuzz(params url.Values, required []string) (*fizz.FizzBuzz, err
 	f.Buzz = fbl[1]
 	f.Limit = fbl[2]
 	return f, nil
+}
+
+func logHandler(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		x, err := httputil.DumpRequest(r, true)
+		if err != nil {
+			http.Error(w, fmt.Sprint(err), http.StatusInternalServerError)
+			return
+		}
+		log.Println(fmt.Sprintf("%q", x))
+		rec := httptest.NewRecorder()
+		fn(rec, r)
+		log.Println(fmt.Sprintf("%q", rec.Body))
+	}
 }
