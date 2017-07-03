@@ -3,8 +3,8 @@ package http
 import (
 	"encoding/json"
 	"errors"
-	"fizzbuzz/fizz"
 	"fmt"
+	"github.com/wouterbeets/fizzbuzz/fizz"
 	"net/http"
 	"net/url"
 	"strconv"

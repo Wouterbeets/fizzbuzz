@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fizzbuzz/http"
 	"flag"
+	"github.com/wouterbeets/fizzbuzz/http"
 	"log"
 )
 
@@ -11,8 +11,8 @@ func main() {
 	flag.StringVar(
 		&serverAddr,
 		"address",
-		"localhost:8000",
-		`the addres your server run on, defaults to localhost:8000
+		"localhost:8080",
+		`the addres your server run on, defaults to localhost:8080
 		usuage: ./fizzbuzz -address=0.0.0.0:80`,
 	)
 	flag.Parse()
