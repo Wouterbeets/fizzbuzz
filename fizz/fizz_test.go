@@ -32,10 +32,17 @@ func TestFizzBuzz(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		res := FizzBuzz(test.fizzStr, test.buzzStr, test.fizzVal, test.buzzVal, test.limit)
+		fb := &FizzBuzz{
+			test.fizzStr,
+			test.buzzStr,
+			test.fizzVal,
+			test.buzzVal,
+			test.limit,
+		}
+		res := fb.Generate()
 		for i, line := range res {
 			if line != test.want[i] {
-				fmt.Println(test, res)
+				fmt.Println(test.want[i], line)
 				t.Fail()
 			}
 		}

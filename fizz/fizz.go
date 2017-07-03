@@ -5,8 +5,8 @@ import (
 )
 
 type FizzBuzz struct {
-	BuzzName string
 	FizzName string
+	BuzzName string
 	Fizz     int
 	Buzz     int
 	Limit    int
