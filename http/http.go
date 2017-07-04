@@ -1,3 +1,4 @@
+// http contains all http related code
 package http
 
 import (
@@ -5,21 +6,20 @@ import (
 	"errors"
 	"fmt"
 	"github.com/wouterbeets/fizzbuzz/fizz"
-	"log"
 	"net/http"
-	"net/http/httptest"
-	"net/http/httputil"
 	"net/url"
 	"strconv"
 )
 
+// New server creates and returns a http server configured to listen to the provided address
 func NewServer(addr string) *http.Server {
-	http.HandleFunc("/fizz", logHandler(FizzHandler))
+	http.HandleFunc("/fizz", FizzHandler)
 	return &http.Server{
 		Addr: addr,
 	}
 }
 
+// Fizzhandler handles all fizz requests
 func FizzHandler(w http.ResponseWriter, req *http.Request) {
 	if req.Method != "GET" {
 		writeError(w, http.StatusBadRequest, errors.New("Only GET is Allowed"))
@@ -99,18 +99,4 @@ func paramsToFizzBuzz(params url.Values, required []string) (*fizz.FizzBuzz, err
 	f.Buzz = fbl[1]
 	f.Limit = fbl[2]
 	return f, nil
-}
-
-func logHandler(fn http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		x, err := httputil.DumpRequest(r, true)
-		if err != nil {
-			http.Error(w, fmt.Sprint(err), http.StatusInternalServerError)
-			return
-		}
-		log.Println(fmt.Sprintf("%q", x))
-		rec := httptest.NewRecorder()
-		fn(rec, r)
-		log.Println(fmt.Sprintf("%q", rec.Body))
-	}
 }

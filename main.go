@@ -1,3 +1,4 @@
+// fizzbuzz, a REST API to the classic fizzbuzz excercise
 package main
 
 import (
